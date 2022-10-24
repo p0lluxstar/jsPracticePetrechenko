@@ -1,0 +1,27 @@
+// GIT 
+git --initial или git init // установка git
+git config --global user.name "Evgeniy"  // --local
+git config --global user.email evgeniy@evgeniy.ru // --local
+git status
+git add -A или git add name.txt или git add *txt // индексация файлов
+git reset HEAD test.txt// отмена проиндексированных файлов
+git commit -a -m"first commit" // добавление коммита
+git log 
+git log --max-count=5 // выводит историю коммитов, буду выведены 5 последниех коммитов
+
+git clone https://github.com/p0lluxstar/XXX.git // бы выкачать из репозитория на новую машинку
+git push // обновляет в githup
+git pull //обновляет из githup
+
+git checkout test.txt // вернет нам состоянии то, которые было в прошлом коммите
+
+*********
+git remote add origin https://github.com/p0lluxstar/UlbiTv_ReactCourse.git
+git branch -M main
+git push -u origin main
+*********
+
+
+Если при git push ошибка вызванная различаем между локальным и удаленном репозиториями тогда - вводим название коммита, Ctr+c два раза, затем ":wq!". Произойдет слияние этих репозиторий.
+
+// Для того что настроить перенос строк VSC надо найти в настройках word wrap и включить его, так же можно выставить значие ширины строки
