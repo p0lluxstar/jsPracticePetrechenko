@@ -1,0 +1,19 @@
+Project1
+	003
+		document.querySelectorAll
+		item.addEventListener
+		e.preventDefault()
+		e.target
+	004
+		(target.classList.contains(tabSelector.replace(/\./, ''))
+		target.parentNode == item
+	005
+		const postData = async (url, data)
+		let res = await fetch()
+		document.createElement('div')
+		statusMessage.classList.add('status');
+		item.appendChild(statusMessage)
+		postData('assets/server.php', formData)
+		.catch
+		.finally
+		
