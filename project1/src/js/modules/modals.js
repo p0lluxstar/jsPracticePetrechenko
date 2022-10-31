@@ -59,8 +59,9 @@ const modals = () => {
     bindModal('.phone_link', '.popup', '.popup .popup_close');
     bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
     bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false); // false не позволить закрыть модельное окно нажав на подложку
-    // false не позволить закрыть модельное окно нажав на подложку
+    bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false);// false не позволить закрыть модельное окно нажав на подложку
     //showModalBuTime('.popup', 60000);
 };
+
 
 export default modals;
