@@ -16,4 +16,7 @@ Project1
 		postData('assets/server.php', formData)
 		.catch
 		.finally
+	007
+		nodeName
+		if (item.getAttribute('type') === 'checkbox')
 		
