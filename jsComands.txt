@@ -19,4 +19,5 @@ Project1
 	007
 		nodeName
 		if (item.getAttribute('type') === 'checkbox')
+		formData.append(key, state[key])
 		

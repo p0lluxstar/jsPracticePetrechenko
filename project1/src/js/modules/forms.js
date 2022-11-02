@@ -1,6 +1,6 @@
 import checkNumInputs from "./checkNumInputs";
 
-const forms = () => {
+const forms = (state) => {
     const form = document.querySelectorAll('form'),
             inputs = document.querySelectorAll('input');
 
@@ -37,6 +37,11 @@ const forms = () => {
                 item.appendChild(statusMessage); // метод appendChild будет помещать созданый div в конец формы
 
                 const formData = new FormData(item); // собираются все данные форм
+                if (item.getAttribute('data-calc') === 'end'){
+                    for(let key in state){
+                        formData.append(key, state[key]); //Метод append позволяет вставить в конец какого-либо элемента другой элемент.
+                    }
+                }
                 
                 postData('assets/server.php', formData) // запрос отправки данных на сервер server.php с данным formData
                     .then(res => {

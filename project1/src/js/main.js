@@ -15,5 +15,5 @@ window.addEventListener('DOMContentLoaded', () =>{ // глобальный об�
     tabs('.glazing_slider', '.glazing_block', '.glazing_content', 'active'); // передаем классы табов
     tabs('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click'); // передаем классы табов
     tabs('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline-block');
-    forms();
+    forms(modalState);
 });

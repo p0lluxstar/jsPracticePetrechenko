@@ -15,19 +15,27 @@ const changeModalState = (state) => {
             item.addEventListener(event, () => {
                 switch(item.nodeName){ // свойство nodeName объекта Node возвращает строку (DOMString), содержащую имя текущего узла. Свойство доступно только для чтения
                     case 'SPAN' :
-                        console.log('span');
+                        state[prop] = i;
                         break;
                     case 'INPUT' :
                         if (item.getAttribute('type') === 'checkbox'){ //метод getAttribute() объекта Element возвращает значение указанного атрибута элемента. Если данный атрибут не существует у указанного элемента, то возвращаемое значение будет соответствовать значению null
-                            console.log('chckbox');
+                            i === 0 ? state[prop] = 'Холодное' : state[prop] = 'Теплое';
+                            elem.forEach((box, j) => { // что бы можно было поставить только одну галку
+                                box.checked = false;
+                                if (i == j){
+                                    box.checked = true;
+                                }
+                            })
                         } else {
-                            console.log('input');
+                            state[prop] = item.value;
                         }
                         break;
                     case 'SELECT' :
-                        console.log('select');
+                        state[prop] = item.value;
                         break;
                 }
+
+                console.log(state)
             })
             
         })
