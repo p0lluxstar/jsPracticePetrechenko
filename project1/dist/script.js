@@ -17834,6 +17834,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+/* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+/* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
+/* harmony import */ var _modules_images__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/images */ "./src/js/modules/images.js");
+
+
+
 
 
 
@@ -17842,13 +17848,124 @@ window.addEventListener('DOMContentLoaded', function () {
   // глобальный обработчик событий, эта команда отвечает за то что скрипты будут начнут исполняться только после того как будез загружен дом дерево
   'use strict';
 
+  var modalState = {};
+  var deadline = '2022-12-31'; // до какого числа обратный отсчет таймера
+
+  Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])();
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_slider', '.glazing_block', '.glazing_content', 'active'); // передаем классы табов
 
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click'); // передаем классы табов
 
-  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline-block');
+  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
+  Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('.container1', deadline);
+  Object(_modules_images__WEBPACK_IMPORTED_MODULE_6__["default"])();
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/changeModalState.js":
+/*!********************************************!*\
+  !*** ./src/js/modules/changeModalState.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
+
+
+
+var changeModalState = function changeModalState(state) {
+  var windowForm = document.querySelectorAll('.balcon_icons_img'),
+      windowWidth = document.querySelectorAll('#width'),
+      windowHeight = document.querySelectorAll('#height'),
+      windowType = document.querySelectorAll('#view_type'),
+      windowProfil = document.querySelectorAll('.checkbox');
+  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_1__["default"])('#width'); // функция проверки того что вводятся только числа, эта фукнция отедльный модуль     
+
+  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_1__["default"])('#height'); // функция проверки того что вводятся только числа, эта фукнция отедльный модуль     
+
+  function bindActionToElems(event, elem, prop) {
+    // функция которая на каждый элемент навешивает обработчик события и записывает в определенное свойство prop
+    elem.forEach(function (item, i) {
+      item.addEventListener(event, function () {
+        switch (item.nodeName) {
+          // свойство nodeName объекта Node возвращает строку (DOMString), содержащую имя текущего узла. Свойство доступно только для чтения
+          case 'SPAN':
+            state[prop] = i;
+            break;
+
+          case 'INPUT':
+            if (item.getAttribute('type') === 'checkbox') {
+              //метод getAttribute() объекта Element возвращает значение указанного атрибута элемента. Если данный атрибут не существует у указанного элемента, то возвращаемое значение будет соответствовать значению null
+              i === 0 ? state[prop] = 'Холодное' : state[prop] = 'Теплое';
+              elem.forEach(function (box, j) {
+                // что бы можно было поставить только одну галку
+                box.checked = false;
+
+                if (i == j) {
+                  box.checked = true;
+                }
+              });
+            } else {
+              state[prop] = item.value;
+            }
+
+            break;
+
+          case 'SELECT':
+            state[prop] = item.value;
+            break;
+        }
+
+        console.log(state);
+      });
+    });
+  }
+
+  bindActionToElems('click', windowForm, 'form');
+  bindActionToElems('input', windowHeight, 'height');
+  bindActionToElems('input', windowWidth, 'width');
+  bindActionToElems('change', windowType, 'type');
+  bindActionToElems('change', windowProfil, 'profile');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (changeModalState);
+
+/***/ }),
+
+/***/ "./src/js/modules/checkNumInputs.js":
+/*!******************************************!*\
+  !*** ./src/js/modules/checkNumInputs.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var checkNumInputs = function checkNumInputs(selector) {
+  var numInputs = document.querySelectorAll(selector);
+  numInputs.forEach(function (item) {
+    // функция проверка ввода номера телефона, если вводится не цифра то ничего не будет прописываться
+    item.addEventListener('input', function () {
+      item.value = item.value.replace(/\D/, '');
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (checkNumInputs);
 
 /***/ }),
 
@@ -17871,15 +17988,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
 
 
 
 
 
 
-var forms = function forms() {
+
+var forms = function forms(state) {
   var form = document.querySelectorAll('form'),
       inputs = document.querySelectorAll('input');
+  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_5__["default"])('input[name="user_phone"]'); // функция проверки того что вводятся только числа, эта фукнция отедльный модуль     
+
   var message = {
     loading: 'Загрузка...',
     success: 'Спасибо! Скоро мы с вами свяжемся',
@@ -17938,16 +18059,24 @@ var forms = function forms() {
 
       var formData = new FormData(item); // собираются все данные форм
 
+      if (item.getAttribute('data-calc') === 'end') {
+        for (var key in state) {
+          formData.append(key, state[key]); //Метод append позволяет вставить в конец какого-либо элемента другой элемент.
+        }
+      }
+
       postData('assets/server.php', formData) // запрос отправки данных на сервер server.php с данным formData
       .then(function (res) {
         console.log(res);
         statusMessage.textContent = message.success;
       }).catch(function () {
         return statusMessage.textContent = message.failure;
-      }).finally(function () {
+      }) // метод .catch() объекта Promise добавляет обработчик или обработчики, которые будут вызваны при изменении состояния объекта Promise на rejected (выполнение отклонено).
+      .finally(function () {
+        // метод .finally() объекта Promise добавляет обработчик, который будет вызван вне зависимости от того с каким результатом объект Promise был выполнен (rejected - выполнение отклонено, или fulfilled - успешное выполнение
         clearInputs();
         setTimeout(function () {
-          status.Message.remove();
+          statusMessage.remove();
         }, 5000);
       });
     });
@@ -17955,6 +18084,52 @@ var forms = function forms() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (forms);
+
+/***/ }),
+
+/***/ "./src/js/modules/images.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/images.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var images = function images() {
+  var imgPopup = document.createElement('div'),
+      // метод document.createElement() позволяет создать и вернуть новый элемент (пустой узел Element) с указанным именем тега.
+  workSection = document.querySelector('.works'),
+      bigImage = document.createElement('img');
+  imgPopup.classList.add('popup'); // classList.add добоввляет класс элементу
+
+  workSection.appendChild(imgPopup); // Метод appendChild позволяет вставить в конец какого-либо другой элемент. Чаще всего используется после создания элемента с помощью createElement.
+
+  imgPopup.style.justifyContent = 'center'; // CSS свойство justify-contentcss3 определяет как браузер распределяет пространство между и вокруг флекс элементов вдоль главной оси контейнера (горизонтально), или производит выравнивание всего макета сетки по оси строки grid-контейнера.
+
+  imgPopup.style.alignItems = 'center';
+  imgPopup.style.desplay = 'none';
+  imgPopup.appendChild(bigImage);
+  workSection.addEventListener('click', function (e) {
+    e.preventDefault(); // метод preventDefault() объекта Event при вызове отменяет действие события по умолчанию. Событие продолжает распространяться как обычно, только с тем исключением, что событие ничего не делает.
+
+    var target = e.target; //Target-это элемент, который вызвал событие (например, пользователь нажал на него). currentTarget-это элемент, к которому привязан прослушиватель событий.
+
+    if (target && target.classList.contains('preview')) {
+      imgPopup.style.display = 'flex';
+      var path = target.parentNode.getAttribute('href'); // свойство parentNode объекта Node возвращает узел, который является родителем данного узла. В том случае, если узел не имеет родителя, или родитель не является элементом, то это свойство вернет значение null. метод getAttribute() объекта Element возвращает значение указанного атрибута элемента
+
+      bigImage.setAttribute('src', path); // метод setAttribute() объекта Element позволяет добавить новый атрибут, или значение атрибута с указанным именем текущему элементу.
+    }
+
+    if (target && target.matches('div.popup')) {
+      // Метод matches позволяет проверить, удовлетворяет ли элемент указанному CSS селектору.
+      imgPopup.style.display = 'none';
+    }
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (images);
 
 /***/ }),
 
@@ -17973,30 +18148,46 @@ __webpack_require__.r(__webpack_exports__);
 
 var modals = function modals() {
   function bindModal(triggerSelector, modalSelector, closeSelector) {
+    var closeClickOverlay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     // функция показывает модальные окна
     var trigger = document.querySelectorAll(triggerSelector);
     var modal = document.querySelector(modalSelector);
     var close = document.querySelector(closeSelector);
+    var windows = document.querySelectorAll('[data-modal]'); // в этой переменноый лежат все модальные окна с атрибутом data-modal
+
+    var scroll = calcScroll();
     trigger.forEach(function (item) {
       item.addEventListener('click', function (e) {
         if (e.target) {
           e.preventDefault();
         }
 
+        windows.forEach(function (item) {
+          item.style.display = 'none';
+        });
         modal.style.display = 'block';
-        document.body.style.overflow = 'hidden'; //document.body.classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+        document.body.style.marginRight = "".concat(scroll, "px"); //document.body.classList.add('modal-open');
       });
     });
     close.addEventListener('click', function () {
+      windows.forEach(function (item) {
+        item.style.display = 'none';
+      });
       modal.style.display = 'none';
-      document.body.style.overflow = ''; //document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.marginRight = "0px"; //document.body.classList.remove('modal-open');
     });
     modal.addEventListener('click', function (e) {
-      // e - объект события
+      // подложка, e - объект события
       // console.log(e.target) - <div class='popup_engineer'></div>
-      if (e.target === modal) {
+      if (e.target === modal && closeClickOverlay) {
+        windows.forEach(function (item) {
+          item.style.display = 'none';
+        });
         modal.style.display = 'none';
-        document.body.style.overflow = ''; //document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.marginRight = "0px"; //document.body.classList.remove('modal-open');
       }
     });
   }
@@ -18010,8 +18201,27 @@ var modals = function modals() {
   }
 
   ;
+
+  function calcScroll() {
+    // фукнция подсчитывает ширину скролинга браузера
+    var div = document.createElement('div');
+    div.style.width = '50px';
+    div.style.height = '50px';
+    div.style.overflowY = 'scroll';
+    div.style.visibility = 'hidden';
+    document.body.appendChild(div);
+    var scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
+  }
+
   bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
-  bindModal('.phone_link', '.popup', '.popup .popup_close'); //showModalBuTime('.popup', 60000);
+  bindModal('.phone_link', '.popup', '.popup .popup_close');
+  bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
+  bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false); // false не позволить закрыть модельное окно нажав на подложку
+
+  bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false); // false не позволить закрыть модельное окно нажав на подложку
+  //showModalBuTime('.popup', 60000);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
@@ -18035,6 +18245,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var tabs = function tabs(headerSelector, tabSelector, contentSelector, activeClass) {
+  var display = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'block';
   var header = document.querySelector(headerSelector),
       tab = document.querySelectorAll(tabSelector),
       content = document.querySelectorAll(contentSelector);
@@ -18055,7 +18266,7 @@ var tabs = function tabs(headerSelector, tabSelector, contentSelector, activeCla
   function showTabContent() {
     var i = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
     // показывает определенный контент
-    content[i].style.display = 'block';
+    content[i].style.display = display;
     tab[i].classList.add(activeClass);
   }
 
@@ -18079,6 +18290,80 @@ var tabs = function tabs(headerSelector, tabSelector, contentSelector, activeCla
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (tabs);
+
+/***/ }),
+
+/***/ "./src/js/modules/timer.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/timer.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var timer = function timer(id, deadline) {
+  // функция которая считает сколько дней, часов, секунд
+  var addZero = function addZero(num) {
+    // функция которая подстовляет 0 перед одинарными числами
+    if (num <= 9) {
+      return '0' + num;
+    } else {
+      return num;
+    }
+  };
+
+  var getTimerRemaining = function getTimerRemaining(endtime) {
+    var t = Date.parse(endtime) - Date.parse(new Date()),
+        //new Date содержит текущее время в мл
+    seconds = Math.floor(t / 1000 % 60),
+        // метод floor() объекта Math вычисляет и возвращает наибольшее целое число, которое меньше или равно переданному числу (округляет число вниз)
+    minutes = Math.floor(t / 1000 / 60 % 60),
+        // число разделится с остатком на 60
+    hours = Math.floor(t / (1000 * 60 * 60) % 24),
+        days = Math.floor(t / (1000 * 60 * 60 * 24));
+    return {
+      'total': t,
+      'days': days,
+      'hours': hours,
+      'minutes': minutes,
+      'seconds': seconds
+    };
+  };
+
+  var setClock = function setClock(selector, endtime) {
+    // функция которая будет подставлять значение нужному элементу
+    var timer = document.querySelector(selector),
+        days = timer.querySelector('#days'),
+        hours = timer.querySelector('#hours'),
+        minutes = timer.querySelector('#minutes'),
+        seconds = timer.querySelector('#seconds'),
+        timeInterval = setInterval(updateClock, 1000); // setInterval позволяет вызывать функцию регулярно, повторяя вызов через определённый интервал времени.
+
+    updateClock();
+
+    function updateClock() {
+      // функция которая обновляет время каждую секунду
+      var t = getTimerRemaining(endtime);
+      days.textContent = addZero(t.days);
+      hours.textContent = addZero(t.hours);
+      minutes.textContent = addZero(t.minutes);
+      seconds.textContent = addZero(t.seconds);
+
+      if (t.total <= 0) {
+        days.textContent = '00';
+        hours.textContent = '00';
+        minutes.textContent = '00';
+        seconds.textContent = '00';
+        clearInterval(timeInterval);
+      }
+    }
+  };
+
+  setClock(id, deadline);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (timer);
 
 /***/ }),
 
